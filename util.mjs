@@ -1,5 +1,23 @@
 import * as THREE from 'three';
 
+export function mod(a, n) {
+  return ((a % n) + n) % n;
+}
+
+export const modUv = (uv) => {
+  uv.x = mod(uv.x, 1);
+  uv.y = mod(uv.y, 1);
+  return uv;
+};
+
+export function getVelocityDampingFactor(dampingPer60Hz, timeDiff) {
+  return Math.pow(dampingPer60Hz, timeDiff / 60);
+}
+
+export function getPlayerPrefix(playerId) {
+  return playersMapName + '.' + playerId;
+}
+
 export const getSkinnedMeshes = object => {
   const model = object.scene;
   const skinnedMeshes = [];
@@ -776,3 +794,61 @@ export const retargetAnimation = (srcAnimation, srcBaseModel, dstBaseModel) => {
   
   return dstAnimation;
 }; */
+
+export function angleDifference(angle1, angle2) {
+  let a = angle2 - angle1;
+  a = mod(a + Math.PI, Math.PI * 2) - Math.PI;
+  return a;
+}
+
+export const fetchArrayBuffer = async srcUrl => {
+  const res = await fetch(srcUrl);
+  if (res.ok) {
+    const arrayBuffer = await res.arrayBuffer();
+    return arrayBuffer;
+  } else {
+    throw new Error('failed to load: ' + res.status + ' ' + srcUrl);
+  }
+};
+
+export const align = (v, N) => {
+  const r = v % N;
+  return r === 0 ? v : v - r + N;
+};
+export const align4 = v => align(v, 4);
+
+export const getClosestPowerOf2 = size => Math.ceil(Math.log2(size));
+
+export const memoize = (fn) => {
+  let loaded = false;
+  let cache = null;
+  return () => {
+    if (!loaded) {
+      cache = fn();
+      loaded = true;
+    }
+    return cache;
+  };
+};
+
+export const addDefaultLights = (scene/*, { shadowMap = false } = {} */) => {
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(ambientLight);
+  scene.ambientLight = ambientLight;
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 4);
+  directionalLight.position.set(1, 2, 3);
+  scene.add(directionalLight);
+  scene.directionalLight = directionalLight;
+  /* if (shadowMap) {
+    const SHADOW_MAP_WIDTH = 1024;
+    const SHADOW_MAP_HEIGHT = 1024;
+
+    directionalLight.castShadow = true;
+
+    directionalLight.shadow.camera = new THREE.PerspectiveCamera( 50, 1, 0.1, 50 );
+    // directionalLight.shadow.bias = 0.0001;
+
+    directionalLight.shadow.mapSize.width = SHADOW_MAP_WIDTH;
+    directionalLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
+  } */
+};
