@@ -73,6 +73,12 @@ const upVector = new THREE.Vector3(0, 1, 0);
 
 const cubicBezier = easing(0, 1, 0, 1);
 
+const getNextPhysicsId = (() => {
+  let ids = 0;
+  return () => ++ids;
+})();
+const useDebug = () => false;
+
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 const srcCubeGeometries = {};
 const debugMeshMaterial = new THREE.MeshNormalMaterial({
@@ -1867,7 +1873,7 @@ class Avatar {
   
     this.avatarRenderer.update(timestamp, timeDiff, this);
 
-    const debug = metaversefile.useDebug();
+    const debug = useDebug();
     if (debug.enabled && !this.debugMesh) {
       this.debugMesh = _makeDebugMesh();
       this.debugMesh.wrapToAvatar(this);
@@ -2058,7 +2064,7 @@ class Avatar {
 
   destroy() {
     this.avatarRenderer.destroy();
-    scene.remove(this.avatarRenderer.scene);
+    this.avatarRenderer.scene.parent.remove(this.avatarRenderer.scene);
 
     this.setAudioEnabled(false);
   }
