@@ -5,7 +5,7 @@ import {WebaverseShaderMaterial} from './materials.js';
 // import {getRenderer, scene, camera} from './renderer.js';
 import Avatar from './avatars.js';
 import {AvatarRenderer} from './avatar-renderer.js';
-import {mod, angleDifference, addDefaultLights} from './util.mjs';
+import {mod, angleDifference, addDefaultLights} from './util.js';
 // import {world} from './world.js';
 import {
   maxAvatarQuality,

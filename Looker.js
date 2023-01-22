@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {
   getEyePosition,
-} from './util.mjs';
+} from './util.js';
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();

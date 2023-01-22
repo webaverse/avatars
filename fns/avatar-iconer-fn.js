@@ -2,7 +2,7 @@ import {AvatarRenderer} from '../avatar-renderer.js';
 import {createAvatarForScreenshot, screenshotAvatar} from '../avatar-screenshotter.js';
 import {emotes} from '../emotes/emote-manager.js';
 import {maxAvatarQuality} from '../constants.js';
-import {fetchArrayBuffer, createCanvas} from '../util.mjs';
+import {fetchArrayBuffer, createCanvas} from '../util.js';
 
 const allEmotions = [''].concat(emotes.map(emote => emote.name));
 

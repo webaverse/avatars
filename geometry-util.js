@@ -1,7 +1,7 @@
 import {
   align,
   getClosestPowerOf2,
-} from './util.mjs';
+} from './util.js';
 
 export class Allocator {
   constructor(moduleInstance) {

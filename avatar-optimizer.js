@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {MaxRectsPacker} from 'maxrects-packer';
 // import {getRenderer} from './renderer.js';
-import {modUv} from './util.mjs';
+import {modUv} from './util.js';
 import exporters from './exporters.js';
 
 const defaultTextureSize = 4096;

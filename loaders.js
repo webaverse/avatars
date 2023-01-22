@@ -11,7 +11,7 @@ import {MeshoptDecoder} from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 // import {GIFLoader} from './GIFLoader.js';
 // import {VOXLoader} from './VOXLoader.js';
 // import {EXRLoader} from 'three/examples/jsm/loaders/EXRLoader.js';
-import {memoize} from './util.mjs';
+import {memoize} from './util.js';
 
 class MozLightMapExtension {
   constructor(parser) {

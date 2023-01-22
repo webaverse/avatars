@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import * as avatarSpriter from './avatar-spriter.js';
-import {getAvatarHeight, getAvatarWidth, getModelBones} from './util.mjs';
+import {getAvatarHeight, getAvatarWidth, getModelBones} from './util.js';
 import loaders from './loaders.js';
 import {WebaverseShaderMaterial} from './materials.js';
 // import {abortError} from '../lock-manager.js';

@@ -3,7 +3,7 @@ import Avatar from './avatars.js';
 import {AvatarRenderer} from './avatar-renderer.js';
 import {maxAvatarQuality} from './constants.js';
 // import {getRenderer} from './renderer.js';
-import {fetchArrayBuffer, addDefaultLights} from './util.mjs';
+import {fetchArrayBuffer, addDefaultLights} from './util.js';
 
 const localVector = new THREE.Vector3();
 const localVector2D = new THREE.Vector2();

@@ -4,11 +4,10 @@ import loaders from './loaders.js';
 import {zbdecode} from '../zine/encoding.js';
 import avatarsWasmManager from './avatars-wasm-manager.js'; // XXX hook this up
 import {animationMappingConfig} from './AnimationMapping.js';
-
 import {
   decorateAnimation,
   angleDifference,
-} from './util.mjs';
+} from './util.js';
 
 let animations;
 let animationStepIndices;

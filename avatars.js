@@ -28,7 +28,7 @@ import {
   getSkeleton,
   getSkinnedMeshes,
   getTailBones,
-} from './util.mjs';
+} from './util.js';
 
 import {
   getClosest2AnimationAngles,
