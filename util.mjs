@@ -852,3 +852,14 @@ export const addDefaultLights = (scene/*, { shadowMap = false } = {} */) => {
     directionalLight.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
   } */
 };
+
+export function createCanvas(width, height) {
+  if (isWorker) {
+    return new OffscreenCanvas(width, height);
+  } else {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  }
+}
