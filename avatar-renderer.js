@@ -1,18 +1,18 @@
 /* this file implements avatar optimization and THREE.js Object management + rendering */
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import * as avatarSpriter from '../avatar-spriter.js';
+import * as avatarSpriter from './avatar-spriter.js';
 import {getAvatarHeight, getAvatarWidth, getModelBones} from './util.mjs';
-import loaders from '../loaders.js';
-import {WebaverseShaderMaterial} from '../materials.js';
-import {abortError} from '../lock-manager.js';
-import {minAvatarQuality, maxAvatarQuality} from '../constants.js';
-import settingsManager from '../settings-manager.js';
+import loaders from './loaders.js';
+import {WebaverseShaderMaterial} from './materials.js';
+// import {abortError} from '../lock-manager.js';
+import {minAvatarQuality, maxAvatarQuality} from './constants.js';
+// import settingsManager from '../settings-manager.js';
 import {
   createSpriteAvatarMesh,
   crunchAvatarModel,
   optimizeAvatarModel,
-} from '../offscreen-engine-runtime/fns/avatar-renderer-fns.js';
+} from './avatar-renderer-fns.js';
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();

@@ -1,17 +1,14 @@
 import {MathUtils} from 'three';
 import {VRMCurveMapper} from '@pixiv/three-vrm-core';
-import loaders from '../loaders.js';
-import {zbdecode} from 'zjs/encoding.mjs';
-import physx from '../physx.js';
+import loaders from './loaders.js';
+import {zbdecode} from '../zine/encoding.js';
+import avatarsWasmManager from './avatarsWasmManager.js';
 import {animationMappingConfig} from './AnimationMapping.js';
 
 import {
   decorateAnimation,
-} from './util.mjs';
-
-import {
   angleDifference,
-} from '../util.js';
+} from './util.mjs';
 
 let animations;
 let animationStepIndices;
