@@ -12,7 +12,7 @@ import {
   createSpriteAvatarMesh,
   crunchAvatarModel,
   optimizeAvatarModel,
-} from './avatar-renderer-fns.js';
+} from './fns/avatar-renderer-fns.js';
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();

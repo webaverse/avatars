@@ -1,7 +1,9 @@
-import {emotions} from './emotes/emotions';
-import offscreenEngineManager from './offscreen-engine-runtime/offscreen-engine-manager.js';
-import {avatarManager} from './avatar-manager';
-import {playersManager} from './players-manager';
+import {emotions} from './emotes/emotions.js';
+import {
+  getEmotionCanvases,
+} from './fns/avatar-iconer-fn.js';
+// import {avatarManager} from './avatar-manager';
+// import {playersManager} from './players-manager';
 
 const allEmotions = [''].concat(emotions);
 
@@ -24,34 +26,9 @@ class AvatarIconer extends EventTarget {
 
     this.canvases = [];
 
-    const playerSelectedFn = e => {
-      const {
-        player,
-      } = e.data;
-
-      this.bindPlayer(player);
-    };
-    playersManager.addEventListener('playerchange', playerSelectedFn);
-
-    const avatarchange = e => {
-      this.renderAvatarApp(e.data.app);
-    };
-    avatarManager.addEventListener('avatarchange', avatarchange);
-    
-    const actionupdate = e => {
-      this.updateEmotionFromActions();
-    };
-    avatarManager.addEventListener('actionupdate', actionupdate);
-
-    this.cleanup = () => {
-      playersManager.removeEventListener('playerchange', playerSelectedFn);
-      avatarManager.removeEventListener('avatarchange', avatarchange);
-      avatarManager.removeEventListener('actionupdate', actionupdate);
-    };
-
     this.getEmotionCanvases = (() => {
       return async function(args) {
-        const result = await offscreenEngineManager.request('getEmotionCanvases', args);
+        const result = await getEmotionCanvases(...args);
         return result;
       };
     })();

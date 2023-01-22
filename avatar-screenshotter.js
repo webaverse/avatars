@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import Avatar from './avatars/avatars.js';
-import {AvatarRenderer} from './avatars/avatar-renderer.js';
+import Avatar from './avatars.js';
+import {AvatarRenderer} from './avatar-renderer.js';
 import {maxAvatarQuality} from './constants.js';
-import {getRenderer} from './renderer.js';
-import {fetchArrayBuffer, addDefaultLights} from './util.js';
+// import {getRenderer} from './renderer.js';
+import {fetchArrayBuffer, addDefaultLights} from './util.mjs';
 
 const localVector = new THREE.Vector3();
 const localVector2D = new THREE.Vector2();
@@ -76,7 +76,7 @@ export const screenshotAvatar = ({
   avatar,
   width = 300,
   height = 300,
-  canvas,
+  canvas: writeCanvas,
   // cameraOffset,
   emotion,
 }) => {
@@ -124,17 +124,21 @@ export const screenshotAvatar = ({
   _updateAvatar();
 
   // initialize canvas
-  let writeCanvas;
-  if (canvas) {
-    writeCanvas = canvas;
-  } else {
+  if (!writeCanvas) {
     writeCanvas = document.createElement('canvas');
     writeCanvas.width = width;
     writeCanvas.height = height;
   }
 
   // render
-  const renderer = getRenderer();
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+  });
+  renderer.setPixelRatio(globalThis.devicePixelRatio);
   const pixelRatio = renderer.getPixelRatio();
   const _render = () => {
     // set up scene
