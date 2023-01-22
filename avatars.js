@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import {VRMSpringBoneLoaderPlugin} from '@pixiv/three-vrm-springbone';
-import {AudioRecognizer} from '../audio-recognizer.js';
-import audioManager from '../audio-manager.js';
-import {scene} from '../renderer.js';
-import {
-  getNextPhysicsId,
-} from '../util.js';
+import {AudioRecognizer} from './audio-recognizer.js';
+import audioManager from './audio-manager.js';
+// import {scene} from '../renderer.js';
+// import {
+//   getNextPhysicsId,
+// } from '../util.js';
 import MicrophoneWorker from './microphone-worker.js';
 import LegsManager from './vrarmik/LegsManager.js';
 import PoseManager from './vrarmik/PoseManager.js';
@@ -17,9 +17,9 @@ import {
   idleSpeed,
   runSpeed,
   walkSpeed,
-} from '../constants.js';
-import metaversefile from 'metaversefile';
-import {easing} from '../math-utils.js';
+} from './constants.js';
+// import metaversefile from 'metaversefile';
+import {easing} from './math-utils.js';
 import {
   getAvatarHeight,
   getAvatarWidth,
@@ -63,7 +63,6 @@ const localMatrix2 = new THREE.Matrix4();
 
 const maxIdleVelocity = 0.01;
 const maxHeadTargetTime = 2000;
-
 
 const upRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI*0.5);
 // const downRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI*0.5);
