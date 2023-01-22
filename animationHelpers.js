@@ -2,7 +2,7 @@ import {MathUtils} from 'three';
 import {VRMCurveMapper} from '@pixiv/three-vrm-core';
 import loaders from './loaders.js';
 import {zbdecode} from '../zine/encoding.js';
-import avatarsWasmManager from './avatarsWasmManager.js';
+import avatarsWasmManager from './avatarsWasmManager.js'; // XXX hook this up
 import {animationMappingConfig} from './AnimationMapping.js';
 
 import {
