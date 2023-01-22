@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import Simplex from '../../simplex-noise.js';
-import metaversefile from 'metaversefile';
+import Simplex from '../simplex-noise.js';
+// import metaversefile from 'metaversefile';
 
 const simplex = new Simplex();
 const windDirection = new THREE.Vector3();
@@ -9,8 +9,19 @@ const windNoisePos = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();
 const zeroVector3 = new THREE.Vector3();
 
+const defaultWinds = [
+  {
+    "windType": "directional",
+    "direction": [-1, 0, 0],
+    "windForce": 0.5,
+    "noiseScale": 1,
+    "windFrequency": 1
+  },
+];
+const getWinds = () => defaultWinds;
+
 const update = (timestamp, headPosition, springBoneManager) => {
-  const winds = metaversefile.getWinds();
+  const winds = getWinds();
   const timeS = timestamp / 1000;
 
   const inWindZone = () => {
