@@ -25,6 +25,9 @@ const localMatrix2 =  new THREE.Matrix4();
 const localSphere = new THREE.Sphere();
 const localFrustum = new THREE.Frustum();
 
+const abortError = new Error('aborted');
+abortError.isAbortError = true;
+
 const greenColor = new THREE.Color(0x43a047);
 
 let avatarPlaceholderImagePromise = null;
