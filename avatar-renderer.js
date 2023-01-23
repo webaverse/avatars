@@ -761,10 +761,12 @@ export class AvatarRenderer {
         case 4: {
           if (!this.meshPromise) {
             this.meshPromise = (async () => {
-              await Promise.all([
-                (async () => {
-                  const glbData = this.arrayBuffer;
-                  const object = await _loadGlbObject(glbData, this.srcUrl, {signal});
+              // await Promise.all([
+                // (async () => {
+                  // const glbData = await this.getArrayBuffer();
+                  // const object = await _loadGlbObject(glbData, fakeSrcUrl, {signal});
+                  // const object = gltfClone(this.#gltf);
+                  const object = this.#gltf;
                   const glb = object.scene;
 
                   _forAllMeshes(glb, o => {
@@ -776,9 +778,9 @@ export class AvatarRenderer {
                   glb.boundingSphere = _getMergedBoundingSphere(glb);
 
                   this.mesh = glb;
-                })(),
-                this.#ensureControlObject(),
-              ]);
+                // })();
+                this.#ensureControlObject();
+              // ]);
               this.#bindControlObject();
             })();
           }
