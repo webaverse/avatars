@@ -345,8 +345,8 @@ class Avatar {
     const object = avatarRenderer.controlObject;
     this.object = object;
 
-    const model = this.object.scene;
-    this.model = model; // XXX still needed?
+    // const model = this.object.scene;
+    // this.model = model; // XXX still needed?
 
     this.options = options;
 
