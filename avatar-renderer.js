@@ -31,6 +31,26 @@ const abortError = new Error('aborted');
 abortError.isAbortError = true;
 
 const greenColor = new THREE.Color(0x43a047);
+const fakeSrcUrl = '';
+
+//
+
+const gltfClone = gltf => {
+  if (gltf) {
+    const o = {
+      ...gltf,
+    };
+
+    o.scene = sceneClone(o.scene);
+    o.scenes = [
+      o.scene,
+    ];
+
+    return o;
+  } else {
+    return gltf;
+  }
+};
 
 let avatarPlaceholderImagePromise = null;
 const waitForAvatarPlaceholderImage = () => {
