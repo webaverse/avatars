@@ -238,7 +238,7 @@ export const waitForLoad = async () => {
 
 export const initAnimationSystem = () => {
   for (const spec of animationMappingConfig) {
-    physx.physxWorker.createAnimationMapping(
+    avatarsWasmManager.physxWorker.createAnimationMapping(
       spec.isPosition,
       spec.index,
       spec.isTop,
@@ -251,7 +251,7 @@ export const initAnimationSystem = () => {
   for (const fileName in animations.index) {
     const animation = animations.index[fileName];
     animation.index = animationIndex;
-    const animationPtr = physx.physxWorker.createAnimation(animation.name, animation.duration);
+    const animationPtr = avatarsWasmManager.physxWorker.createAnimation(animation.name, animation.duration);
     animation.ptr = animationPtr;
     // for (const k in animation.interpolants) { // maybe wrong interpolant index order
     for (const spec of animationMappingConfig) { // correct interpolant index order
@@ -261,7 +261,7 @@ export const initAnimationSystem = () => {
 
       const track = animation.tracks.index[k];
       const valueSize = track.type === 'vector' ? 3 : 4;
-      physx.physxWorker.createAnimationInterpolant(
+      avatarsWasmManager.physxWorker.createAnimationInterpolant(
         animationPtr,
         track.times,
         track.values,
@@ -273,7 +273,7 @@ export const initAnimationSystem = () => {
 
   //
 
-  const animationGroupDeclarations = physx.physxWorker.initAnimationSystem();
+  const animationGroupDeclarations = avatarsWasmManager.physxWorker.initAnimationSystem();
 
   // get data back from wasm to js ------------------------------------------------
 
@@ -297,8 +297,8 @@ export const initAnimationSystem = () => {
 };
 
 export const _createAnimation = avatar => {
-  avatar.mixerPtr = physx.physxWorker.createAnimationMixer();
-  avatar.animationAvatarPtr = physx.physxWorker.createAnimationAvatar(avatar.mixerPtr);
+  avatar.mixerPtr = avatarsWasmManager.physxWorker.createAnimationMixer();
+  avatar.animationAvatarPtr = avatarsWasmManager.physxWorker.createAnimationAvatar(avatar.mixerPtr);
 };
 
 export const _updateAnimation = (avatar, now, timeDiff) => {
@@ -424,13 +424,13 @@ export const _updateAnimation = (avatar, now, timeDiff) => {
     avatar.useAnimationEnvelope.forEach(useAnimationEnvelopeName => {
       values.push(UseAnimationIndexes[useAnimationEnvelopeName] || 0);
     });
-    physx.physxWorker.updateAnimationAvatar(avatar.animationAvatarPtr, values, timeDiff);
+    avatarsWasmManager.physxWorker.updateAnimationAvatar(avatar.animationAvatarPtr, values, timeDiff);
   };
   updateValues();
 
   let resultValues;
   const doUpdate = () => {
-    resultValues = physx.physxWorker.updateAnimationMixer(avatar.mixerPtr, now, nowS);
+    resultValues = avatarsWasmManager.physxWorker.updateAnimationMixer(avatar.mixerPtr, now, nowS);
     let index = 0;
     for (const spec of avatar.animationMappings) {
       const {
