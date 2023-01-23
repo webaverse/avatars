@@ -4,6 +4,7 @@ import {AvatarRenderer} from './avatar-renderer.js';
 import {maxAvatarQuality} from './constants.js';
 // import {getRenderer} from './renderer.js';
 import {fetchArrayBuffer, addDefaultLights} from './util.js';
+import {makeRenderer} from './util.js';
 
 const localVector = new THREE.Vector3();
 const localVector2D = new THREE.Vector2();
@@ -134,10 +135,7 @@ export const screenshotAvatar = ({
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true,
-  });
+  const renderer = makeRenderer(canvas);
   renderer.setPixelRatio(globalThis.devicePixelRatio);
   const pixelRatio = renderer.getPixelRatio();
   const _render = () => {
