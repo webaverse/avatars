@@ -432,20 +432,31 @@ const _getMergedBoundingSphere = o => {
   return sphere;
 };
 
-export class AvatarRenderer /* extends EventTarget */ {
-  constructor({
-    arrayBuffer,
-    srcUrl,
-    camera = null, // if null, do not frustum cull
-    quality = settingsManager.getCharacterQuality(),
-    controlled = false,
-  } = {})	{
-    // super();
+export class AvatarRenderer {
+  #arrayBuffer = null;
+  #gltf = null;
+  #gltf2 = null;
 
-    //
+  constructor(opts = {})	{
+    const {
+      arrayBuffer = null,
+      gltf = null,
+      gltf2 = null,
+      // srcUrl,
+      camera = null, // if null, do not frustum cull
+      quality = settingsManager.getCharacterQuality(),
+      controlled = false,
+    } = opts;
+    if (!(!!arrayBuffer ^ !!gltf)) {
+      throw new Error('only one of arrayBuffer or gltf are allowed');
+    }
 
-    this.arrayBuffer = arrayBuffer;
-    this.srcUrl = srcUrl;
+
+    this.#arrayBuffer = arrayBuffer;
+    // this.#gltf = gltfClone(gltf);
+    this.#gltf = gltf;
+    this.#gltf2 = gltf2;
+    // this.srcUrl = srcUrl;
     this.camera = camera;
     this.quality = quality;
     this.isControlled = controlled;
@@ -487,6 +498,60 @@ export class AvatarRenderer /* extends EventTarget */ {
     this.setQuality(quality);
   }
 
+  get gltf() {
+    debugger;
+  }
+  get arrayBuffer() {
+    debugger;
+  }
+
+  async getArrayBuffer() {
+    debugger;
+    if (!this.#arrayBuffer) {
+      const glbData = await new Promise((accept, reject) => {
+        const {gltfExporter} = exporters;
+        const gltf = this.#gltf;
+        gltfExporter.parse(
+          this.#gltf,
+          function onCompleted(arrayBuffer) {
+            accept(arrayBuffer);
+          }, function onError(error) {
+            reject(error);
+          },
+          {
+            binary: true,
+            // onlyVisible: false,
+            // forceIndices: true,
+            // truncateDrawRange: false,
+            includeCustomExtensions: true,
+          },
+        );
+      });
+      this.#arrayBuffer = glbData;
+    }
+    return this.#arrayBuffer;
+  }
+  async getGltf() {
+    debugger;
+    if (!this.#gltf) {
+      const gltf = await new Promise((accept, reject) => {
+        const {gltfLoader} = loaders;
+        gltfLoader.parse(
+          this.#arrayBuffer,
+          '',
+          gltf => {
+            accept(gltf);
+          },
+          error => {
+            reject(error);
+          },
+        );
+      });
+      this.#gltf = gltf;
+    }
+    return this.#gltf;
+  }
+
   getAvatarSize() {
     const model = this.controlObject.scene;
     model.updateMatrixWorld();
@@ -519,7 +584,10 @@ export class AvatarRenderer /* extends EventTarget */ {
   async #ensureControlObject() {
     if (!this.controlObjectLoaded) {
       this.controlObjectLoaded = true;
-      this.controlObject = await parseVrm(this.arrayBuffer, this.srcUrl);
+      // const arrayBuffer = await this.getArrayBuffer();
+      // this.controlObject = await parseVrm(arrayBuffer, fakeSrcUrl);
+
+      this.controlObject = gltfClone(this.#gltf);
 
       const {height} = this.getAvatarSize();
       this.height = height;
@@ -594,7 +662,7 @@ export class AvatarRenderer /* extends EventTarget */ {
                     textureImages,
                   } = await createSpriteAvatarMesh({
                     arrayBuffer: this.arrayBuffer,
-                    srcUrl: this.srcUrl,
+                    srcUrl: fakeSrcUrl,
                   });
                   const glb = avatarSpriter.createSpriteAvatarMeshFromTextures(textureImages);
                   _forAllMeshes(glb, _unfrustumCull);
@@ -626,9 +694,9 @@ export class AvatarRenderer /* extends EventTarget */ {
                     glbData,
                   } = await crunchAvatarModel({
                     arrayBuffer: this.arrayBuffer,
-                    srcUrl: this.srcUrl,
+                    srcUrl: fakeSrcUrl,
                   });
-                  const object = await _loadGlbObject(glbData, this.srcUrl, {signal});
+                  const object = await _loadGlbObject(glbData, fakeSrcUrl, {signal});
                   // downloadFile(new Blob([glbData], {type: 'application/octet-stream'}), 'avatar.glb');
                   const glb = object.scene;
                   _forAllMeshes(glb, o => {
@@ -663,9 +731,9 @@ export class AvatarRenderer /* extends EventTarget */ {
                     glbData,
                   } = await optimizeAvatarModel({
                     arrayBuffer: this.arrayBuffer,
-                    srcUrl: this.srcUrl,
+                    srcUrl: fakeSrcUrl,
                   });
-                  const object = await _loadGlbObject(glbData, this.srcUrl, {signal});
+                  const object = await _loadGlbObject(glbData, fakeSrcUrl, {signal});
                   const glb = object.scene;
                   _forAllMeshes(glb, o => {
                     _enableShadows(o);
