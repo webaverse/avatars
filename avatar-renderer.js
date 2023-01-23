@@ -1,6 +1,7 @@
 /* this file implements avatar optimization and THREE.js Object management + rendering */
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import {clone as sceneClone} from 'three/examples/jsm/utils/SkeletonUtils.js';
 import * as avatarSpriter from './avatar-spriter.js';
 import {getAvatarHeight, getAvatarWidth, getModelBones} from './util.js';
 import loaders from './loaders.js';
@@ -13,6 +14,7 @@ import {
   crunchAvatarModel,
   optimizeAvatarModel,
 } from './fns/avatar-renderer-fns.js';
+import exporters from './exporters.js';
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();
