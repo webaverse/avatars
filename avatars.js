@@ -2064,7 +2064,7 @@ class Avatar {
 
   destroy() {
     this.avatarRenderer.destroy();
-    this.avatarRenderer.scene.parent.remove(this.avatarRenderer.scene);
+    this.avatarRenderer.scene.parent && this.avatarRenderer.scene.parent.remove(this.avatarRenderer.scene);
 
     this.setAudioEnabled(false);
   }
