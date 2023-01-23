@@ -145,96 +145,102 @@ async function loadSkeleton() {
   }
 }
 
-export const waitForLoad = async () => {
-  await Promise.resolve(); // wait for metaversefile to be defined
-
-  await Promise.all([
-    loadAnimations(),
-    loadSkeleton(),
-  ]);
-
-  for (const k in animationsAngleArrays) {
-    const as = animationsAngleArrays[k];
-    for (const a of as) {
-      a.animation = animations.index[a.name];
-    }
+let loadPromise = null;
+export const waitForLoad = () => {
+  if (!loadPromise) {
+    loadPromise = (async () => {
+      await Promise.resolve(); // wait for metaversefile to be defined
+    
+      await Promise.all([
+        loadAnimations(),
+        loadSkeleton(),
+      ]);
+    
+      for (const k in animationsAngleArrays) {
+        const as = animationsAngleArrays[k];
+        for (const a of as) {
+          a.animation = animations.index[a.name];
+        }
+      }
+      for (const k in animationsAngleArraysMirror) {
+        const as = animationsAngleArraysMirror[k];
+        for (const a of as) {
+          a.animation = animations.index[a.name];
+        }
+      }
+      for (const k in animationsIdleArrays) {
+        animationsIdleArrays[k].animation = animations.index[animationsIdleArrays[k].name];
+      }
+    
+      const walkingAnimations = [
+        'walking.fbx',
+        'left strafe walking.fbx',
+        'right strafe walking.fbx',
+      ].map(name => animations.index[name]);
+      const walkingBackwardAnimations = [
+        'walking backwards.fbx',
+        'left strafe walking reverse.fbx',
+        'right strafe walking reverse.fbx',
+      ].map(name => animations.index[name]);
+      const runningAnimations = [
+        'Fast Run.fbx',
+        'left strafe.fbx',
+        'right strafe.fbx',
+      ].map(name => animations.index[name]);
+      const runningBackwardAnimations = [
+        'running backwards.fbx',
+        'left strafe reverse.fbx',
+        'right strafe reverse.fbx',
+      ].map(name => animations.index[name]);
+      const crouchingForwardAnimations = [
+        'Sneaking Forward.fbx',
+        'Crouched Sneaking Left.fbx',
+        'Crouched Sneaking Right.fbx',
+      ].map(name => animations.index[name]);
+      const crouchingBackwardAnimations = [
+        'Sneaking Forward reverse.fbx',
+        'Crouched Sneaking Left reverse.fbx',
+        'Crouched Sneaking Right reverse.fbx',
+      ].map(name => animations.index[name]);
+      for (const animation of animations) {
+        decorateAnimation(animation);
+      }
+    
+      _normalizeAnimationDurations(walkingAnimations, walkingAnimations[0]);
+      _normalizeAnimationDurations(walkingBackwardAnimations, walkingBackwardAnimations[0]);
+      _normalizeAnimationDurations(runningAnimations, runningAnimations[0]);
+      _normalizeAnimationDurations(runningBackwardAnimations, runningBackwardAnimations[0]);
+      _normalizeAnimationDurations(crouchingForwardAnimations, crouchingForwardAnimations[0], 0.5);
+      _normalizeAnimationDurations(crouchingBackwardAnimations, crouchingBackwardAnimations[0], 0.5);
+    
+      /* function mergeAnimations(a, b) {
+        const o = {};
+        for (const k in a) {
+          o[k] = a[k];
+        }
+        for (const k in b) {
+          o[k] = b[k];
+        }
+        return o;
+      } */
+      /* jumpAnimationSegments = {
+          chargeJump: animations.find(a => a.isChargeJump),
+          chargeJumpFall: animations.find(a => a.isChargeJumpFall),
+          isFallLoop: animations.find(a => a.isFallLoop),
+          isLanding: animations.find(a => a.isLanding)
+        }; */
+    
+      // chargeJump = animations.find(a => a.isChargeJump);
+      // standCharge = animations.find(a => a.isStandCharge);
+      // fallLoop = animations.find(a => a.isFallLoop);
+      // swordSideSlash = animations.find(a => a.isSwordSideSlash);
+      // swordTopDownSlash = animations.find(a => a.isSwordTopDownSlash)
+    
+      initAnimationSystem();
+    })();
   }
-  for (const k in animationsAngleArraysMirror) {
-    const as = animationsAngleArraysMirror[k];
-    for (const a of as) {
-      a.animation = animations.index[a.name];
-    }
-  }
-  for (const k in animationsIdleArrays) {
-    animationsIdleArrays[k].animation = animations.index[animationsIdleArrays[k].name];
-  }
-
-  const walkingAnimations = [
-    'walking.fbx',
-    'left strafe walking.fbx',
-    'right strafe walking.fbx',
-  ].map(name => animations.index[name]);
-  const walkingBackwardAnimations = [
-    'walking backwards.fbx',
-    'left strafe walking reverse.fbx',
-    'right strafe walking reverse.fbx',
-  ].map(name => animations.index[name]);
-  const runningAnimations = [
-    'Fast Run.fbx',
-    'left strafe.fbx',
-    'right strafe.fbx',
-  ].map(name => animations.index[name]);
-  const runningBackwardAnimations = [
-    'running backwards.fbx',
-    'left strafe reverse.fbx',
-    'right strafe reverse.fbx',
-  ].map(name => animations.index[name]);
-  const crouchingForwardAnimations = [
-    'Sneaking Forward.fbx',
-    'Crouched Sneaking Left.fbx',
-    'Crouched Sneaking Right.fbx',
-  ].map(name => animations.index[name]);
-  const crouchingBackwardAnimations = [
-    'Sneaking Forward reverse.fbx',
-    'Crouched Sneaking Left reverse.fbx',
-    'Crouched Sneaking Right reverse.fbx',
-  ].map(name => animations.index[name]);
-  for (const animation of animations) {
-    decorateAnimation(animation);
-  }
-
-  _normalizeAnimationDurations(walkingAnimations, walkingAnimations[0]);
-  _normalizeAnimationDurations(walkingBackwardAnimations, walkingBackwardAnimations[0]);
-  _normalizeAnimationDurations(runningAnimations, runningAnimations[0]);
-  _normalizeAnimationDurations(runningBackwardAnimations, runningBackwardAnimations[0]);
-  _normalizeAnimationDurations(crouchingForwardAnimations, crouchingForwardAnimations[0], 0.5);
-  _normalizeAnimationDurations(crouchingBackwardAnimations, crouchingBackwardAnimations[0], 0.5);
-
-  /* function mergeAnimations(a, b) {
-    const o = {};
-    for (const k in a) {
-      o[k] = a[k];
-    }
-    for (const k in b) {
-      o[k] = b[k];
-    }
-    return o;
-  } */
-  /* jumpAnimationSegments = {
-      chargeJump: animations.find(a => a.isChargeJump),
-      chargeJumpFall: animations.find(a => a.isChargeJumpFall),
-      isFallLoop: animations.find(a => a.isFallLoop),
-      isLanding: animations.find(a => a.isLanding)
-    }; */
-
-  // chargeJump = animations.find(a => a.isChargeJump);
-  // standCharge = animations.find(a => a.isStandCharge);
-  // fallLoop = animations.find(a => a.isFallLoop);
-  // swordSideSlash = animations.find(a => a.isSwordSideSlash);
-  // swordTopDownSlash = animations.find(a => a.isSwordTopDownSlash)
-
-  initAnimationSystem();
-};
+  return loadPromise;
+}
 
 export const initAnimationSystem = () => {
   for (const spec of animationMappingConfig) {
