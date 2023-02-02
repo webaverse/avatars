@@ -1997,7 +1997,7 @@ class Avatar {
     return this.audioWorker.getInput();
   }
 
-  setMicrophoneEnabled(enabled) {
+  /* setMicrophoneEnabled(enabled) {
     // cleanup
     if (this.microphoneWorker) {
       this.microphoneWorker.close();
@@ -2008,7 +2008,7 @@ class Avatar {
     if (enabled) {
       this.volume = 0;
      
-      const audioContext = audioManager.getAudioContext();
+      const {audioContext} = this;
       if (audioContext.state === 'suspended') {
         (async () => {
           await audioContext.resume();
@@ -2038,7 +2038,7 @@ class Avatar {
     } else {
       this.volume = 0;
     }
-  }
+  } */
 
   isMicrophoneEnabled() {
     return !!this.microphoneWorker;
