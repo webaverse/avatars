@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import Avatar from './avatars.js';
-import {AvatarRenderer} from './avatar-renderer.js';
+import {AvatarQuality} from './avatar-quality.js';
 import {maxAvatarQuality} from './constants.js';
 // import {getRenderer} from './renderer.js';
 import {fetchArrayBuffer, addDefaultLights} from './util.js';
@@ -37,14 +37,14 @@ export const screenshotAvatarUrl = async ({
 }) => {
   const arrayBuffer = await fetchArrayBuffer(start_url);
   
-  const avatarRenderer = new AvatarRenderer({
+  const avatarQuality = new AvatarQuality({
     arrayBuffer,
     srcUrl: start_url,
     quality: maxAvatarQuality,
   });
-  await avatarRenderer.waitForLoad();
+  await avatarQuality.waitForLoad();
   
-  const avatar = createAvatarForScreenshot(avatarRenderer);
+  const avatar = createAvatarForScreenshot(avatarQuality);
 
   const result = await screenshotAvatar({
     avatar,
@@ -56,8 +56,8 @@ export const screenshotAvatarUrl = async ({
   avatar.destroy();
   return result;
 };
-export const createAvatarForScreenshot = avatarRenderer => {
-  const avatar = new Avatar(avatarRenderer, {
+export const createAvatarForScreenshot = avatarQuality => {
+  const avatar = new Avatar(avatarQuality, {
     fingers: true,
     hair: true,
     visemes: true,
@@ -95,7 +95,7 @@ export const screenshotAvatar = ({
   };
   _setTransform(); */
 
-  const model = avatar.avatarRenderer.scene;
+  const model = avatar.avatarQuality.scene;
 
   // initialize scene
   const camera2 = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
