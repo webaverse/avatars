@@ -744,23 +744,69 @@ class Avatar {
         }
       }; */
       
+      const _dedupe = a => {
+        a = a.slice();
+        for (let i = 0; i < a.length; i++) {
+          const v = a[i];
+          for (let j = i + 1; j < a.length; j++) {
+            if (a[j] === v) {
+              a[j] = -1;
+            }
+          }
+        }
+        return a;
+      };
+
       this.skinnedMeshesVisemeMappings = this.skinnedMeshes.map(o => {
         const {morphTargetDictionary, morphTargetInfluences} = o;
         if (morphTargetDictionary && morphTargetInfluences) {
-          const blinkLeftIndex = _getBlendShapeIndexForPresetName('blink_l');
-          const blinkRightIndex = _getBlendShapeIndexForPresetName('blink_r');
-          const aIndex = _getBlendShapeIndexForPresetName('a');
-          const eIndex = _getBlendShapeIndexForPresetName('e');
-          const iIndex = _getBlendShapeIndexForPresetName('i');
-          const oIndex = _getBlendShapeIndexForPresetName('o');
-          const uIndex = _getBlendShapeIndexForPresetName('u');
-          const neutralIndex = _getBlendShapeIndexForPresetName('neutral');
-          const angryIndex = _getBlendShapeIndexForPresetName('angry');
-          const funIndex = _getBlendShapeIndexForPresetName('fun');
-          const joyIndex = _getBlendShapeIndexForPresetName('joy');
-          const sorrowIndex = _getBlendShapeIndexForPresetName('sorrow');
-          const surpriseIndex = _getMorphTargetInfluenceIndexForRegex(morphTargetDictionary, /surprise/i);
-          // const extraIndex = _getBlendShapeIndexForName('extra');
+          // const blinkLeftIndex = _getBlendShapeIndexForPresetName('blink_l');
+          // const blinkRightIndex = _getBlendShapeIndexForPresetName('blink_r');
+          // const aIndex = _getBlendShapeIndexForPresetName('a');
+          // const eIndex = _getBlendShapeIndexForPresetName('e');
+          // const iIndex = _getBlendShapeIndexForPresetName('i');
+          // const oIndex = _getBlendShapeIndexForPresetName('o');
+          // const uIndex = _getBlendShapeIndexForPresetName('u');
+          // const neutralIndex = _getBlendShapeIndexForPresetName('neutral');
+          // const angryIndex = _getBlendShapeIndexForPresetName('angry');
+          // const funIndex = _getBlendShapeIndexForPresetName('fun');
+          // const joyIndex = _getBlendShapeIndexForPresetName('joy');
+          // const sorrowIndex = _getBlendShapeIndexForPresetName('sorrow');
+          // const surpriseIndex = _getMorphTargetInfluenceIndexForRegex(morphTargetDictionary, /surprise/i);
+          // // const extraIndex = _getBlendShapeIndexForName('extra');
+
+          const [
+            blinkLeftIndex,
+            blinkRightIndex,
+            aIndex,
+            eIndex,
+            iIndex,
+            oIndex,
+            uIndex,
+            neutralIndex,
+            angryIndex,
+            funIndex,
+            joyIndex,
+            sorrowIndex,
+            surpriseIndex,
+            // extraIndex,
+          ] = _dedupe([
+            _getBlendShapeIndexForPresetName('blink_l'),
+            _getBlendShapeIndexForPresetName('blink_r'),
+            _getBlendShapeIndexForPresetName('a'),
+            _getBlendShapeIndexForPresetName('e'),
+            _getBlendShapeIndexForPresetName('i'),
+            _getBlendShapeIndexForPresetName('o'),
+            _getBlendShapeIndexForPresetName('u'),
+            _getBlendShapeIndexForPresetName('neutral'),
+            _getBlendShapeIndexForPresetName('angry'),
+            _getBlendShapeIndexForPresetName('fun'),
+            _getBlendShapeIndexForPresetName('joy'),
+            _getBlendShapeIndexForPresetName('sorrow'),
+            _getMorphTargetInfluenceIndexForRegex(morphTargetDictionary, /surprise/i),
+            // _getBlendShapeIndexForName('extra'),
+          ]);
+
           return [
             morphTargetInfluences,
             blinkLeftIndex,
