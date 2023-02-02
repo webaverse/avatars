@@ -2050,7 +2050,7 @@ class Avatar {
 
   getAudioRecognizer() {
     if (!this.#audioRecognizer) {
-      const audioContext = audioManager.getAudioContext();
+      const {audioContext} = this;
       this.#audioRecognizer = new AudioRecognizer({
         sampleRate: audioContext.sampleRate,
       });
@@ -2107,7 +2107,7 @@ class Avatar {
       muted: false,
       // emitVolume: true,
       // emitBuffer: true,
-      // audioContext: audioManager.getAudioContext(),
+      // audioContext: this.audioContext,
       // microphoneWorkletUrl: '/avatars/microphone-worklet.js',
     });
 
