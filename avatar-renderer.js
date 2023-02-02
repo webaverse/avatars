@@ -324,7 +324,7 @@ const _bindControl = (dstModel, srcObject) => {
     _recurse(srcModel);
     return result;
   };
-  const _findSrcSkeletonFromBoneName = (boneName) => {
+  /* const _findSrcSkeletonFromBoneName = (boneName) => {
     let skeleton = null;
 
     const bone = _findBoneInSrc(boneName);
@@ -347,13 +347,40 @@ const _bindControl = (dstModel, srcObject) => {
     }
 
     return skeleton;
-  };
-  const _findSrcSkeletonFromDstSkeleton = skeleton => {
+  }; */
+  /* const _findSrcSkeletonFromDstSkeleton = skeleton => {
     return _findSrcSkeletonFromBoneName(skeleton.bones[0].name);
+  }; */
+  const _findSrcSkeletonMeshFromBoneName = (boneName) => {
+    let skeletonMesh = null;
+
+    const bone = _findBoneInSrc(boneName);
+    if (bone !== null) {
+      const _recurse = o => {
+        if (o.isSkinnedMesh) {
+          if (o.skeleton.bones.includes(bone)) {
+            skeletonMesh = o;
+            return false;
+          }
+        }
+        for (const child of o.children) {
+          if (_recurse(child) === false) {
+            return false;
+          }
+        }
+        return true;
+      };
+      _recurse(srcModel);
+    }
+
+    return skeletonMesh;
   };
-  const _findMorphMeshInSrc = () => {
+  const _findSrcSkeletonMeshFromDstSkeleton = skeleton => {
+    return _findSrcSkeletonMeshFromBoneName(skeleton.bones[0].name);
+  };
+  const _findMorphMeshInSrc = (object) => {
     const srcBlendShapeGroups = srcObject?.userData?.gltfExtensions?.VRM?.blendShapeGroups;
-    const numSrcBlendShapeGroups = srcBlendShapeGroups?.length ?? 0;
+    // const numSrcBlendShapeGroups = srcBlendShapeGroups?.length ?? 0;
 
     let result = null;
     const _recurse = o => {
@@ -361,7 +388,8 @@ const _bindControl = (dstModel, srcObject) => {
         o.isMesh &&
         o.morphTargetDictionary &&
         o.morphTargetInfluences &&
-        o.morphTargetInfluences.length >= numSrcBlendShapeGroups
+        // o.morphTargetInfluences.length >= numSrcBlendShapeGroups
+        o.name === object.name
       ) {
         result = o;
         return false;
@@ -377,15 +405,33 @@ const _bindControl = (dstModel, srcObject) => {
     return result;
   };
 
+  const _findMeshesWithName = (name) => {
+    const result = [];
+    const _recurse = o => {
+      if (o.isMesh && o.name === name) {
+        result.push(o);
+      }
+      for (const child of o.children) {
+        _recurse(child);
+      }
+    };
+    _recurse(srcModel);
+    return result;
+  };
+
   const uncontrolFns = [];
   dstModel.traverse(o => {
     // bind skinned meshes to skeletons
     if (o.isSkinnedMesh) {
       const oldSkeleton = o.skeleton;
-      const newSkeleton = _findSrcSkeletonFromDstSkeleton(oldSkeleton);
+      // const newSkeleton = _findSrcSkeletonFromDstSkeleton(oldSkeleton);
+      const newSkeletonMesh = _findSrcSkeletonMeshFromDstSkeleton(oldSkeleton);
 
-      o.skeleton = newSkeleton;
-
+      // note: this is intentionally backwards;
+      // spring bone binding happens after this and the gltf parser cache will reference + edit the new skeleton
+      // o.skeleton = newSkeleton;
+      newSkeletonMesh.skeleton = oldSkeleton;
+      
       uncontrolFns.push(() => {
         o.skeleton = oldSkeleton;
       });
@@ -395,7 +441,8 @@ const _bindControl = (dstModel, srcObject) => {
       const oldMorphTargetDictionary = o.morphTargetDictionary;
       const oldMorphTargetInfluences = o.morphTargetInfluences;
 
-      const morphMesh = _findMorphMeshInSrc();
+      const morphMesh = _findMorphMeshInSrc(o);
+      // const meshes = _findMeshesWithName(o.name);
       if (morphMesh) {
         o.morphTargetDictionary = morphMesh.morphTargetDictionary;
         o.morphTargetInfluences = morphMesh.morphTargetInfluences;
@@ -407,6 +454,7 @@ const _bindControl = (dstModel, srcObject) => {
       }
     }
   });
+
   return () => {
     for (const uncontrolFn of uncontrolFns) {
       uncontrolFn();
