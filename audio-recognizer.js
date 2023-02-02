@@ -48,7 +48,6 @@ class AudioRecognizer extends EventTarget {
         } */
         // This is a case when the recognizer has a new result
         if (e.data.hasOwnProperty('result')) {
-          // console.log('got result', e.data.result);
           this.dispatchEvent(new MessageEvent('result', {
             data: e.data.result,
           }));
