@@ -44,6 +44,7 @@ class MicrophoneWorker extends EventTarget {
     if (this.audioWorkletNode) {
       this.audioWorkletNode.disconnect();
       this.audioWorkletNode.port.onmessage = null;
+      this.audioWorkletNode = null;
     }
   }
 }
