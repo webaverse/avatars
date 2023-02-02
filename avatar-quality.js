@@ -480,7 +480,7 @@ const _getMergedBoundingSphere = o => {
   return sphere;
 };
 
-export class AvatarRenderer {
+export class AvatarQuality {
   #arrayBuffer = null;
   #gltf = null;
   #gltf2 = null;
@@ -512,7 +512,7 @@ export class AvatarRenderer {
     //
 
     this.scene = new THREE.Object3D();
-    this.scene.name = 'avatarRendererScene';
+    this.scene.name = 'avatarQualityScene';
     this.placeholderMesh = _makeAvatarPlaceholderMesh();
 
     //
