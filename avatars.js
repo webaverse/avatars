@@ -1957,7 +1957,7 @@ class Avatar {
     if (enabled) {
       this.volume = 0;
 
-      const audioContext = audioManager.getAudioContext();
+      const {audioContext} = this;
       if (audioContext.state === 'suspended') {
         (async () => {
           await audioContext.resume();
