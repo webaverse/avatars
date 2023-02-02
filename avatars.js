@@ -340,9 +340,9 @@ const _makeDebugMesh = avatar => {
 
 class Avatar {
   #audioRecognizer = null;
-	constructor(avatarRenderer, options = {}) {
-    this.avatarRenderer = avatarRenderer;
-    const object = avatarRenderer.controlObject;
+	constructor(avatarQuality, options = {}) {
+    this.avatarQuality = avatarQuality;
+    const object = avatarQuality.controlObject;
     this.object = object;
 
     // const model = this.object.scene;
@@ -355,7 +355,7 @@ class Avatar {
 
     //
 
-    avatarRenderer.setControlled(true);
+    avatarQuality.setControlled(true);
 
     //
 
@@ -1389,7 +1389,7 @@ class Avatar {
   }
 
   async setQuality(quality) {
-    await this.avatarRenderer.setQuality(quality);
+    await this.avatarQuality.setQuality(quality);
   }
 
   lerpShoulderTransforms() {
@@ -1923,7 +1923,7 @@ class Avatar {
     
     this.options.visemes && _updateVisemes();
   
-    this.avatarRenderer.update(timestamp, timeDiff, this);
+    this.avatarQuality.update(timestamp, timeDiff, this);
 
     const debug = useDebug();
     if (debug.enabled && !this.debugMesh) {
@@ -1934,8 +1934,8 @@ class Avatar {
     if (this.debugMesh) {
       if (debug.enabled) {
         this.debugMesh.setFromAvatar(this);
-        if (this.avatarRenderer.currentMesh !== this.debugMesh.parent) {
-          this.avatarRenderer.currentMesh.add(this.debugMesh);
+        if (this.avatarQuality.currentMesh !== this.debugMesh.parent) {
+          this.avatarQuality.currentMesh.add(this.debugMesh);
         }
       }
       this.debugMesh.visible = debug.enabled;
@@ -2115,8 +2115,8 @@ class Avatar {
   } */
 
   destroy() {
-    this.avatarRenderer.destroy();
-    this.avatarRenderer.scene.parent && this.avatarRenderer.scene.parent.remove(this.avatarRenderer.scene);
+    this.avatarQuality.destroy();
+    this.avatarQuality.scene.parent && this.avatarQuality.scene.parent.remove(this.avatarQuality.scene);
 
     this.setAudioEnabled(false);
   }
